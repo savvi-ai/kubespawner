@@ -9,7 +9,7 @@ if v[:2] < (3, 6):
     sys.exit(1)
 
 setup(
-    name='jupyterhub-kubespawner-savvi',
+    name='jupyterhub-kubespawner-savvy',
     version='0.1.0',
     install_requires=[
         'async_generator>=1.8',
