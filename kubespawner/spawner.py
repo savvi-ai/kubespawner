@@ -1996,7 +1996,7 @@ class KubeSpawner(Spawner):
 
     # set of recognised user option keys
     # used for warning about ignoring unrecognised options
-    _user_option_keys = {'profile',}
+    _user_option_keys = {'profile', 'cpu_limit', 'mem_limit'}
 
     @gen.coroutine
     def load_user_options(self):
@@ -2017,6 +2017,14 @@ class KubeSpawner(Spawner):
             yield self._load_profile(selected_profile)
         elif selected_profile:
             self.log.warning("Profile %r requested, but profiles are not enabled", selected_profile)
+
+        cpu_limit_option = self.user_options.get('cpu_limit', None)
+        if cpu_limit_option is not None:
+            self.cpu_limit = float(cpu_limit_option)
+
+        mem_limit_option = self.user_options.get('mem_limit', None)
+        if mem_limit_option is not None:
+            self.mem_limit = mem_limit_option
 
         # help debugging by logging any option fields that are not recognized
         option_keys = set(self.user_options)

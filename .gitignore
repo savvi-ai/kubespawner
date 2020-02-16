@@ -75,3 +75,5 @@ docs/source/build/
 
 # PyBuilder
 target/
+
+.idea
