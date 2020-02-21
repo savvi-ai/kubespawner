@@ -2012,11 +2012,16 @@ class KubeSpawner(Spawner):
                 self._profile_list = yield gen.maybe_future(self.profile_list(self))
             else:
                 self._profile_list = self.profile_list
-        selected_profile = self.user_options.get('profile', None)
-        if self._profile_list:
-            yield self._load_profile(selected_profile)
-        elif selected_profile:
-            self.log.warning("Profile %r requested, but profiles are not enabled", selected_profile)
+        profile = self.user_options.get('profile', None)
+        if isinstance(profile, dict):
+            kubespawner_override = profile.get('kubespawner_override', {})
+            for k, v in kubespawner_override.items():
+                setattr(self, k, v)
+        else:
+            if self._profile_list:
+                yield self._load_profile(profile)
+            elif profile:
+                self.log.warning("Profile %r requested, but profiles are not enabled", profile)
 
         # help debugging by logging any option fields that are not recognized
         option_keys = set(self.user_options)
